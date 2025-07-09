@@ -1,0 +1,40 @@
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:50]	DataManager construct start
+[09:30:45][140495930487296[INFO][asynclogger][Config.hpp:37]	ReadConfig start
+[09:30:45][140495930487296[INFO][asynclogger][Config.hpp:30]	ReadConfig complicate
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:65]	init datamanager
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[09:30:45][140495930487296[INFO][asynclogger][DataManager.hpp:56]	DataManager construct end
+[09:30:45][140495848498752[DEBUG][asynclogger][Service.hpp:26]	Service start(Construct)
+[09:30:45][140495848498752[DEBUG][asynclogger][Service.hpp:32]	Service end(Construct)
+[09:30:45][140495848498752[INFO][asynclogger][Test.cpp:17]	service step in RunModule
+[09:30:45][140495848498752[DEBUG][asynclogger][Service.hpp:64]	event_base_dispatch
+[09:30:48][140495848498752[INFO][asynclogger][Service.hpp:88]	get req, uri: /
+[09:30:48][140495848498752[INFO][asynclogger][Service.hpp:273]	ListShow()
+[09:30:48][140495848498752[INFO][asynclogger][Service.hpp:300]	ListShow() finish
+[09:32:04][140495848498752[INFO][asynclogger][Service.hpp:88]	get req, uri: /
+[09:32:04][140495848498752[INFO][asynclogger][Service.hpp:273]	ListShow()
+[09:32:04][140495848498752[INFO][asynclogger][Service.hpp:300]	ListShow() finish
+[09:49:16][140495848498752[INFO][asynclogger][Service.hpp:88]	get req, uri: /upload
+[09:49:16][140495848498752[INFO][asynclogger][Service.hpp:114]	Upload start
+[09:49:16][140495848498752[INFO][asynclogger][Service.hpp:126]	evbuffer_get_length is 1463081
+[09:49:16][140495848498752[DEBUG][asynclogger][Service.hpp:172]	storage_path:./deep_storage/DSC_1021.jpg
+[09:49:18][140495848498752[INFO][asynclogger][Service.hpp:200]	deep_storage success
+[09:49:18][140495848498752[INFO][asynclogger][DataManager.hpp:18]	NewStorageInfo start
+[09:49:18][140495848498752[INFO][asynclogger][DataManager.hpp:33]	download_url:/download/DSC_1021.jpg,mtime_:Wed Jul  9 09:49:18 2025
+,atime_:Wed Jul  9 09:49:18 2025
+,fsize_:1406948
+[09:49:18][140495848498752[INFO][asynclogger][DataManager.hpp:34]	NewStorageInfo end
+[09:49:18][140495848498752[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[09:49:18][140495848498752[INFO][asynclogger][DataManager.hpp:96]	message storage start
+[09:49:18][140495848498752[INFO][asynclogger][DataManager.hpp:118]	new message for StorageInfo:
+[09:49:18][140495848498752[INFO][asynclogger][DataManager.hpp:127]	message storage end
+[09:49:18][140495848498752[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[09:49:18][140495848498752[INFO][asynclogger][Service.hpp:210]	upload finish:success
+[09:49:18][140495848498752[INFO][asynclogger][Service.hpp:88]	get req, uri: /
+[09:49:18][140495848498752[INFO][asynclogger][Service.hpp:273]	ListShow()
+[09:49:18][140495848498752[INFO][asynclogger][Service.hpp:300]	ListShow() finish

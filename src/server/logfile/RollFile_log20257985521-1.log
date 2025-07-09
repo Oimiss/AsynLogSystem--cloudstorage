@@ -1,0 +1,56 @@
+[07:54:20][139957969809920[INFO][asynclogger][DataManager.hpp:50]	DataManager construct start
+[07:54:20][139957969809920[INFO][asynclogger][Config.hpp:37]	ReadConfig start
+[07:54:20][139957969809920[INFO][asynclogger][Config.hpp:30]	ReadConfig complicate
+[07:54:20][139957969809920[INFO][asynclogger][DataManager.hpp:65]	init datamanager
+[07:54:20][139957969809920[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[07:54:20][139957969809920[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[07:54:20][139957969809920[INFO][asynclogger][DataManager.hpp:56]	DataManager construct end
+[07:54:20][139957817570880[DEBUG][asynclogger][Service.hpp:26]	Service start(Construct)
+[07:54:20][139957817570880[DEBUG][asynclogger][Service.hpp:32]	Service end(Construct)
+[07:54:20][139957817570880[INFO][asynclogger][Test.cpp:17]	service step in RunModule
+[07:54:20][139957817570880[DEBUG][asynclogger][Service.hpp:64]	event_base_dispatch
+[07:54:32][139957817570880[INFO][asynclogger][Service.hpp:88]	get req, uri: /
+[07:54:32][139957817570880[INFO][asynclogger][Service.hpp:273]	ListShow()
+[07:54:32][139957817570880[INFO][asynclogger][Service.hpp:300]	ListShow() finish
+[07:54:32][139957817570880[INFO][asynclogger][Service.hpp:88]	get req, uri: /favicon.ico
+[07:55:34][139957817570880[INFO][asynclogger][Service.hpp:88]	get req, uri: /
+[07:55:34][139957817570880[INFO][asynclogger][Service.hpp:273]	ListShow()
+[07:55:34][139957817570880[INFO][asynclogger][Service.hpp:300]	ListShow() finish
+[07:56:56][139957817570880[INFO][asynclogger][Service.hpp:88]	get req, uri: /upload
+[07:56:56][139957817570880[INFO][asynclogger][Service.hpp:114]	Upload start
+[07:56:56][139957817570880[INFO][asynclogger][Service.hpp:126]	evbuffer_get_length is 1801413
+[07:56:56][139957817570880[DEBUG][asynclogger][Service.hpp:172]	storage_path:./deep_storage/伊地知虹夏.jpeg
+[07:57:07][139957817570880[INFO][asynclogger][Service.hpp:200]	deep_storage success
+[07:57:07][139957817570880[INFO][asynclogger][DataManager.hpp:18]	NewStorageInfo start
+[07:57:07][139957817570880[INFO][asynclogger][DataManager.hpp:33]	download_url:/download/伊地知虹夏.jpeg,mtime_:Wed Jul  9 07:57:07 2025
+,atime_:Wed Jul  9 07:57:07 2025
+,fsize_:1777335
+[07:57:07][139957817570880[INFO][asynclogger][DataManager.hpp:34]	NewStorageInfo end
+[07:57:07][139957817570880[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[07:57:07][139957817570880[INFO][asynclogger][DataManager.hpp:96]	message storage start
+[07:57:07][139957817570880[INFO][asynclogger][DataManager.hpp:118]	new message for StorageInfo:
+[07:57:07][139957817570880[INFO][asynclogger][DataManager.hpp:127]	message storage end
+[07:57:07][139957817570880[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[07:57:07][139957817570880[INFO][asynclogger][Service.hpp:210]	upload finish:success
+[07:57:07][139957817570880[INFO][asynclogger][Service.hpp:88]	get req, uri: /
+[07:57:07][139957817570880[INFO][asynclogger][Service.hpp:273]	ListShow()
+[07:57:07][139957817570880[INFO][asynclogger][Service.hpp:300]	ListShow() finish
+[07:59:06][139957817570880[INFO][asynclogger][Service.hpp:88]	get req, uri: /upload
+[07:59:06][139957817570880[INFO][asynclogger][Service.hpp:114]	Upload start
+[07:59:06][139957817570880[INFO][asynclogger][Service.hpp:126]	evbuffer_get_length is 41485
+[07:59:06][139957817570880[DEBUG][asynclogger][Service.hpp:172]	storage_path:./low_storage/直播.jpg
+[07:59:06][139957817570880[INFO][asynclogger][Service.hpp:187]	low_storage success
+[07:59:06][139957817570880[INFO][asynclogger][DataManager.hpp:18]	NewStorageInfo start
+[07:59:06][139957817570880[INFO][asynclogger][DataManager.hpp:33]	download_url:/download/直播.jpg,mtime_:Wed Jul  9 07:59:06 2025
+,atime_:Wed Jul  9 07:59:06 2025
+,fsize_:41485
+[07:59:06][139957817570880[INFO][asynclogger][DataManager.hpp:34]	NewStorageInfo end
+[07:59:06][139957817570880[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[07:59:06][139957817570880[INFO][asynclogger][DataManager.hpp:96]	message storage start
+[07:59:06][139957817570880[INFO][asynclogger][DataManager.hpp:118]	new message for StorageInfo:
+[07:59:06][139957817570880[INFO][asynclogger][DataManager.hpp:127]	message storage end
+[07:59:06][139957817570880[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[07:59:06][139957817570880[INFO][asynclogger][Service.hpp:210]	upload finish:success
+[07:59:06][139957817570880[INFO][asynclogger][Service.hpp:88]	get req, uri: /
+[07:59:06][139957817570880[INFO][asynclogger][Service.hpp:273]	ListShow()
+[07:59:06][139957817570880[INFO][asynclogger][Service.hpp:300]	ListShow() finish
