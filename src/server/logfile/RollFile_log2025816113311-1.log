@@ -1,0 +1,21 @@
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:50]	DataManager construct start
+[10:32:10][140300598297088[INFO][asynclogger][Config.hpp:37]	ReadConfig start
+[10:32:10][140300598297088[INFO][asynclogger][Config.hpp:30]	ReadConfig complicate
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:65]	init datamanager
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:133]	data_message Insert start
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:142]	data_message Insert end
+[10:32:10][140300598297088[INFO][asynclogger][DataManager.hpp:56]	DataManager construct end
+[10:32:10][140300516308544[DEBUG][asynclogger][Service.hpp:26]	Service start(Construct)
+[10:32:10][140300516308544[DEBUG][asynclogger][Service.hpp:32]	Service end(Construct)
+[10:32:10][140300516308544[INFO][asynclogger][Test.cpp:17]	service step in RunModule
+[10:32:10][140300516308544[DEBUG][asynclogger][Service.hpp:64]	event_base_dispatch
+[10:32:15][140300516308544[INFO][asynclogger][Service.hpp:88]	get req, uri: /
+[10:32:15][140300516308544[INFO][asynclogger][Service.hpp:273]	ListShow()
+[10:32:15][140300516308544[INFO][asynclogger][Service.hpp:300]	ListShow() finish
+[10:32:15][140300516308544[INFO][asynclogger][Service.hpp:88]	get req, uri: /favicon.ico

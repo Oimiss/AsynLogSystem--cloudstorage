@@ -98,6 +98,11 @@ namespace storage
             {
                 Upload(req, arg);
             }
+            // 这里是删除
+            else if (path == "/delete")
+            {
+                Delete(req, arg);
+            }
             // 这里就是显示已存储文件列表，返回一个html页面给浏览器
             else if (path == "/")
             {
@@ -243,7 +248,10 @@ namespace storage
                    << "<span>" << formatSize(file.fsize_) << "</span>"
                    << "<span>" << TimetoStr(file.mtime_) << "</span>"
                    << "</div>"
+                   << "<div class='file-actions'>"
                    << "<button onclick=\"window.location='" << file.url_ << "'\">⬇️ 下载</button>"
+                   << "<button class='delete-btn' onclick=\"deleteFile('" << file.url_ << "')\">❌ 删除</button>"
+                   << "</div>"
                    << "</div>";
             }
 
@@ -400,6 +408,54 @@ namespace storage
             if (download_path != info.storage_path_)
             {
                 remove(download_path.c_str()); // 删除文件
+            }
+        }
+
+        static void Delete(struct evhttp_request *req, void *arg)
+        {
+            mylog::GetLogger("asynclogger")->Info("Delete start");
+            
+            // 获取请求方法，确保是POST请求
+            if (evhttp_request_get_command(req) != EVHTTP_REQ_POST) {
+                mylog::GetLogger("asynclogger")->Warn("Delete: Not a POST request");
+                evhttp_send_reply(req, HTTP_BADREQUEST, "Bad Request: Method not allowed", NULL);
+                return;
+            }
+            
+            // 获取要删除的文件URL
+            struct evkeyvalq params;
+            const char* uri = evhttp_request_get_uri(req);
+            evhttp_parse_query(uri, &params);
+            const char* file_url = evhttp_find_header(&params, "url");
+            
+            if (file_url == NULL) {
+                mylog::GetLogger("asynclogger")->Warn("Delete: Missing file URL");
+                evhttp_send_reply(req, HTTP_BADREQUEST, "Bad Request: Missing file URL", NULL);
+                evhttp_clear_headers(&params);
+                return;
+            }
+            
+            std::string url = file_url;
+            mylog::GetLogger("asynclogger")->Info("Deleting file with URL: %s", url.c_str());
+            
+            // 调用DataManager删除文件
+            bool success = data_->DeleteByURL(url);
+            evhttp_clear_headers(&params);
+            
+            // 准备响应
+            struct evbuffer *buf = evhttp_request_get_output_buffer(req);
+            if (success) {
+                // 成功响应
+                evbuffer_add_printf(buf, "{\"status\": \"success\", \"message\": \"文件删除成功\"}");
+                evhttp_add_header(req->output_headers, "Content-Type", "application/json;charset=utf-8");
+                evhttp_send_reply(req, HTTP_OK, "Success", NULL);
+                mylog::GetLogger("asynclogger")->Info("Delete: Success");
+            } else {
+                // 失败响应
+                evbuffer_add_printf(buf, "{\"status\": \"error\", \"message\": \"文件删除失败\"}");
+                evhttp_add_header(req->output_headers, "Content-Type", "application/json;charset=utf-8");
+                evhttp_send_reply(req, HTTP_INTERNAL, "Server Error", NULL);
+                mylog::GetLogger("asynclogger")->Error("Delete: Failed");
             }
         }
     };

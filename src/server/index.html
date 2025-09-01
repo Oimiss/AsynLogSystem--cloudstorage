@@ -121,6 +121,7 @@
             display: flex;
             gap: 1rem;
             align-items: center;
+            flex: 1;
         }
 
         .file-type {
@@ -128,6 +129,15 @@
             padding: 0.3rem 0.8rem;
             border-radius: 5px;
             font-size: 0.9rem;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
         }
     </style>
 </head>
@@ -208,6 +218,27 @@
 
         function downloadFile(fileId) {
             window.location = `${config.backendUrl}/download?id=${fileId}`;
+        }
+        
+        function deleteFile(fileUrl) {
+            if(confirm('确定要删除此文件吗？')) {
+                fetch(`${config.backendUrl}/delete?url=${encodeURIComponent(fileUrl)}`, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert(data.message || '删除失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('删除错误:', error);
+                    alert('网络连接失败');
+                });
+            }
         }
     </script>
 </body>
