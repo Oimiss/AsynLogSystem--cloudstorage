@@ -37,12 +37,9 @@ public:
 class TcpServer
 {
 public:
-    TcpServer(uint16_t port, func_t func)
-        : port_(port), func_(func)
-    {
+    TcpServer(uint16_t port, func_t func) : port_(port), func_(func) {
     }
-    void init_service()
-    {
+    void init_service() {
         // 创建
         listen_sock_ = socket(AF_INET, SOCK_STREAM, 0);
         if (listen_sock_ == -1){
@@ -63,8 +60,7 @@ public:
         }
     }
 
-    static void *threadRoutine(void *args)
-    {
+    static void *threadRoutine(void *args) {
         pthread_detach(pthread_self()); // 防止在start_service处阻塞
 
         ThreadData *td = static_cast<ThreadData *>(args);
@@ -75,8 +71,7 @@ public:
         return nullptr;
     }
 
-    void start_service()
-    {
+    void start_service() {
         while (true)
         {
             struct sockaddr_in client_addr;
@@ -99,8 +94,7 @@ public:
         }
     }
 
-    void service(int sock,const std::string&& client_info)
-    {
+    void service(int sock,const std::string&& client_info) {
         char buf[1024];
 
         int r_ret = read(sock, buf, sizeof(buf));

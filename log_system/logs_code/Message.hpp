@@ -6,10 +6,8 @@
 #include "Level.hpp"
 #include "Util.hpp"
 
-namespace mylog
-{
-  struct LogMessage
-  {
+namespace mylog {
+  struct LogMessage {
     using ptr = std::shared_ptr<LogMessage>;
     LogMessage() = default;
     LogMessage(LogLevel::value level, std::string file, size_t line,
@@ -22,8 +20,7 @@ namespace mylog
           ctime_(Util::Date::Now()),
           tid_(std::this_thread::get_id()) {}
 
-    std::string format()
-    {
+    std::string format() {
       std::stringstream ret;
       // 获取当前时间
       struct tm t;

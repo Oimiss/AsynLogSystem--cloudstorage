@@ -9,8 +9,7 @@
 #include <functional>
 #include <stdexcept>
 
-class ThreadPool
-{
+class ThreadPool {
 public:
     // 该函数用于初始化线程池，启动指定数量的线程。
     // 对于每个线程，使用 std::thread 创建一个新线程，并将一个 lambda 函数作为线程的执行体。
@@ -21,17 +20,13 @@ public:
     // 从任务队列中取出一个任务，并将其移动到局部变量 task 中，然后解锁。
     // 执行取出的任务。
     ThreadPool(size_t threads) // 启动部分线程
-        : stop(false)
-    {
-        for (size_t i = 0; i < threads; ++i)
-        {
+        : stop(false) {
+        for (size_t i = 0; i < threads; ++i) {
             workers.emplace_back(
-                [this]
-                {
-                    for (;;)
-                    {
+                [this] {
+                    for (;;) {
                         std::function<void()> task;
-                        {
+                        { // 代码块开始
                             std::unique_lock<std::mutex> lock(this->queue_mutex);
                             // 等待任务队列不为空或线程池停止
                             this->condition.wait(lock,
@@ -59,8 +54,7 @@ public:
     // 调用 condition.notify_one() 唤醒一个等待的线程，通知它有新任务可用。
     // 返回 std::future 对象。
     auto enqueue(F &&f, Args &&...args)
-        -> std::future<typename std::result_of<F(Args...)>::type>
-    {
+        -> std::future<typename std::result_of<F(Args...)>::type> {
         using return_type = typename std::result_of<F(Args...)>::type;
 
         // 创建一个打包任务
@@ -80,15 +74,13 @@ public:
         condition.notify_one();
         return res;
     }
-    ~ThreadPool()
-    {
+    ~ThreadPool() {
         {
             std::unique_lock<std::mutex> lock(queue_mutex);
             stop = true;
         }
         condition.notify_all();
-        for (std::thread &worker : workers)
-        {
+        for (std::thread &worker : workers) {
             worker.join();
         }
     }

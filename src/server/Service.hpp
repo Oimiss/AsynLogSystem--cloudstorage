@@ -20,8 +20,7 @@ namespace storage
     class Service
     {
     public:
-        Service()
-        {
+        Service() {
 #ifdef DEBUG_LOG
             mylog::GetLogger("asynclogger")->Debug("Service start(Construct)");
 #endif
@@ -32,8 +31,7 @@ namespace storage
             mylog::GetLogger("asynclogger")->Debug("Service end(Construct)");
 #endif
         }
-        bool RunModule()
-        {
+        bool RunModule() {
             // 初始化环境
             event_base *base = event_base_new();
             if (base == NULL)
@@ -81,8 +79,7 @@ namespace storage
         std::string download_prefix_;
 
     private:
-        static void GenHandler(struct evhttp_request *req, void *arg)
-        {
+        static void GenHandler(struct evhttp_request *req, void *arg) {
             std::string path = evhttp_uri_get_path(evhttp_request_get_evhttp_uri(req));
             path = UrlDecode(path);
             mylog::GetLogger("asynclogger")->Info("get req, uri: %s", path.c_str());
@@ -114,8 +111,7 @@ namespace storage
             }
         }
 
-        static void Upload(struct evhttp_request *req, void *arg)
-        {
+        static void Upload(struct evhttp_request *req, void *arg) {
             mylog::GetLogger("asynclogger")->Info("Upload start");
             // 约定：请求中包含"low_storage"，说明请求中存在文件数据,并希望普通存储\
                 包含"deep_storage"字段则压缩后存储
@@ -215,53 +211,95 @@ namespace storage
             mylog::GetLogger("asynclogger")->Info("upload finish:success");
         }
 
-        static std::string TimetoStr(time_t t)
-        {
-            std::string tmp = std::ctime(&t);
-            return tmp;
+        static std::string TimetoStr(time_t t) {
+            struct tm timeinfo;
+            localtime_r(&t, &timeinfo);
+            
+            char buffer[80];
+            strftime(buffer, sizeof(buffer), "%Y-%m-%d", &timeinfo);
+            return std::string(buffer);
         }
 
         // 前端代码处理函数
         // 在渲染函数中直接处理StorageInfo
-        static std::string generateModernFileList(const std::vector<StorageInfo> &files)
-        {
+        static std::string generateModernFileList(const std::vector<StorageInfo> &files) {
             std::stringstream ss;
-            ss << "<div class='file-list'><h3>已上传文件</h3>";
+            
+            // 如果没有文件，显示空状态
+            if (files.empty()) {
+                ss << "<div class=\"empty-state\">";
+                ss << "<i class=\"fas fa-folder-open\"></i>";
+                ss << "<h3>暂无文件</h3>";
+                ss << "<p>上传文件后将显示在此处</p>";
+                ss << "</div>";
+                return ss.str();
+            }
 
+            // 有文件时，生成文件列表
             for (const auto &file : files)
             {
                 std::string filename = FileUtil(file.storage_path_).FileName();
 
-                // 从路径中解析存储类型（示例逻辑，需根据实际路径规则调整）
+                // 从路径中解析存储类型
                 std::string storage_type = "low";
                 if (file.storage_path_.find("deep") != std::string::npos)
                 {
                     storage_type = "deep";
                 }
 
-                ss << "<div class='file-item'>"
-                   << "<div class='file-info'>"
-                   << "<span>📄" << filename << "</span>"
-                   << "<span class='file-type'>"
-                   << (storage_type == "deep" ? "深度存储" : "普通存储")
-                   << "</span>"
-                   << "<span>" << formatSize(file.fsize_) << "</span>"
-                   << "<span>" << TimetoStr(file.mtime_) << "</span>"
-                   << "</div>"
-                   << "<div class='file-actions'>"
-                   << "<button onclick=\"window.location='" << file.url_ << "'\">⬇️ 下载</button>"
-                   << "<button class='delete-btn' onclick=\"deleteFile('" << file.url_ << "')\">❌ 删除</button>"
-                   << "</div>"
-                   << "</div>";
+                // 根据文件扩展名选择合适的图标
+                std::string file_icon = "fa-file";
+                size_t dot_pos = filename.find_last_of(".");
+                if (dot_pos != std::string::npos) {
+                    std::string ext = filename.substr(dot_pos + 1);
+                    if (ext == "pdf") file_icon = "fa-file-pdf";
+                    else if (ext == "doc" || ext == "docx") file_icon = "fa-file-word";
+                    else if (ext == "xls" || ext == "xlsx") file_icon = "fa-file-excel";
+                    else if (ext == "ppt" || ext == "pptx") file_icon = "fa-file-powerpoint";
+                    else if (ext == "zip" || ext == "rar" || ext == "7z" || ext == "tar" || ext == "gz") file_icon = "fa-file-archive";
+                    else if (ext == "jpg" || ext == "jpeg" || ext == "png" || ext == "gif" || ext == "bmp" || ext == "svg") file_icon = "fa-file-image";
+                    else if (ext == "mp3" || ext == "wav" || ext == "ogg" || ext == "flac") file_icon = "fa-file-audio";
+                    else if (ext == "mp4" || ext == "avi" || ext == "mov" || ext == "wmv" || ext == "mkv") file_icon = "fa-file-video";
+                    else if (ext == "txt" || ext == "log" || ext == "md") file_icon = "fa-file-alt";
+                    else if (ext == "html" || ext == "htm" || ext == "xml" || ext == "json" || ext == "js" || ext == "css") file_icon = "fa-file-code";
+                }
+
+                // 格式化时间
+                std::string time_str = TimetoStr(file.mtime_);
+                // 移除末尾的换行符
+                if (!time_str.empty() && time_str[time_str.length() - 1] == '\n') {
+                    time_str = time_str.substr(0, time_str.length() - 1);
+                }
+
+                ss << "<div class=\"file-item\">";
+                
+                // 文件图标
+                ss << "<div class=\"file-icon\"><i class=\"fas " << file_icon << "\"></i></div>";
+                
+                // 文件信息
+                ss << "<div class=\"file-info\">";
+                ss << "<div class=\"file-name\">" << filename << "</div>";
+                ss << "<div class=\"file-details\">";
+                ss << "<span><i class=\"fas fa-hdd\"></i> " << (storage_type == "deep" ? "深度存储" : "普通存储") << "</span>";
+                ss << "<span><i class=\"fas fa-weight-hanging\"></i> " << formatSize(file.fsize_) << "</span>";
+                ss << "<span><i class=\"fas fa-clock\"></i> " << time_str << "</span>";
+                ss << "</div>";
+                ss << "</div>";
+                
+                // 文件操作
+                ss << "<div class=\"file-actions\">";
+                ss << "<button class=\"action-btn btn-success\" onclick=\"downloadFile('" << file.url_ << "')\"><i class=\"fas fa-download\"></i> 下载</button>";
+                ss << "<button class=\"action-btn btn-danger\" onclick=\"deleteFile('" << file.url_ << "', '" << filename << "')\"><i class=\"fas fa-trash-alt\"></i> 删除</button>";
+                ss << "</div>";
+                
+                ss << "</div>";
             }
 
-            ss << "</div>";
             return ss.str();
         }
 
         // 文件大小格式化函数
-        static std::string formatSize(uint64_t bytes)
-        {
+        static std::string formatSize(uint64_t bytes) {
             const char *units[] = {"B", "KB", "MB", "GB"};
             int unit_index = 0;
             double size = bytes;
@@ -276,8 +314,7 @@ namespace storage
             ss << std::fixed << std::setprecision(2) << size << " " << units[unit_index];
             return ss.str();
         }
-        static void ListShow(struct evhttp_request *req, void *arg)
-        {
+        static void ListShow(struct evhttp_request *req, void *arg) {
             mylog::GetLogger("asynclogger")->Info("ListShow()");
             // 1. 获取所有的文件存储信息
             std::vector<StorageInfo> arry;
@@ -307,8 +344,7 @@ namespace storage
             evhttp_send_reply(req, HTTP_OK, NULL, NULL);
             mylog::GetLogger("asynclogger")->Info("ListShow() finish");
         }
-        static std::string GetETag(const StorageInfo &info)
-        {
+        static std::string GetETag(const StorageInfo &info) {
             // 自定义etag :  filename-fsize-mtime
             FileUtil fu(info.storage_path_);
             std::string etag = fu.FileName();
@@ -318,8 +354,7 @@ namespace storage
             etag += std::to_string(info.mtime_);
             return etag;
         }
-        static void Download(struct evhttp_request *req, void *arg)
-        {
+        static void Download(struct evhttp_request *req, void *arg) {
             // 1. 获取客户端请求的资源路径path   req.path
             // 2. 根据资源路径，获取StorageInfo
             StorageInfo info;
@@ -411,8 +446,7 @@ namespace storage
             }
         }
 
-        static void Delete(struct evhttp_request *req, void *arg)
-        {
+        static void Delete(struct evhttp_request *req, void *arg) {
             mylog::GetLogger("asynclogger")->Info("Delete start");
             
             // 获取请求方法，确保是POST请求

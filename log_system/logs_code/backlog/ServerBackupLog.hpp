@@ -21,8 +21,7 @@ const int backlog = 32;
 
 class TcpServer;
 //该类包含客户端的ip和端口信息
-class ThreadData
-{
+class ThreadData {
 public:
     ThreadData(int fd, const std::string &ip, const uint16_t &port, TcpServer *ts)
         : sock(fd),client_ip(ip),client_port(port),ts_(ts){}
@@ -34,15 +33,12 @@ public:
     TcpServer *ts_;
 };
 
-class TcpServer
-{
+class TcpServer {
 public:
     TcpServer(uint16_t port, func_t func)
-        : port_(port), func_(func)
-    {
+        : port_(port), func_(func) {
     }
-    void init_service()
-    {
+    void init_service() {
         // 创建
         listen_sock_ = socket(AF_INET, SOCK_STREAM, 0);
         if (listen_sock_ == -1){

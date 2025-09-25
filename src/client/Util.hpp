@@ -18,8 +18,7 @@ namespace my_storage
 	public:
 		FileUtil(const std::string& filename) : filename_(filename) {}
 
-		size_t FileSize()
-		{
+		size_t FileSize() {
 			struct stat s;
 			auto ret = stat(filename_.c_str(), &s);
 			if (ret == -1)
@@ -29,8 +28,7 @@ namespace my_storage
 			}
 			return s.st_size;
 		}
-		time_t LastAccessTime()
-		{
+		time_t LastAccessTime() {
 			struct stat s;
 			auto ret = stat(filename_.c_str(), &s);
 			if (ret == -1)
@@ -41,8 +39,7 @@ namespace my_storage
 			return s.st_atime;
 		}
 
-		time_t LastModifyTime()
-		{
+		time_t LastModifyTime() {
 			struct stat s;
 			auto ret = stat(filename_.c_str(), &s);
 			if (ret == -1)
@@ -53,8 +50,7 @@ namespace my_storage
 			return s.st_mtime;
 		}
 
-		std::string FileName()
-		{
+		std::string FileName() {
 			auto pos = filename_.find_last_of("/");
 			if (pos == std::string::npos)
 				return filename_;
@@ -62,8 +58,7 @@ namespace my_storage
 		}
 
 		// read from pos
-		bool GetPosLen(std::string* content, size_t pos, size_t len)
-		{
+		bool GetPosLen(std::string* content, size_t pos, size_t len) {
 			if (pos + len > FileSize())
 			{
 				std::cout <<__FILE__<<__LINE__<< "needed data is larger file fize" << std::endl;
@@ -93,14 +88,12 @@ namespace my_storage
 			return true;
 		}
 
-		bool GetContent(std::string* content)
-		{
+		bool GetContent(std::string* content) {
 			return GetPosLen(content, 0, FileSize());
 		}
 
 		//write file
-		bool SetContent(const std::string& content)
-		{
+		bool SetContent(const std::string& content) {
 			std::ofstream ofs;
 			ofs.open(filename_.c_str(), std::ios::binary);
 			if (!ofs.is_open())
@@ -120,20 +113,17 @@ namespace my_storage
 
 		//there is three function about dir
 		//c++17，need include <filesystem>. namespace fs = std::filesystem;
-		bool Exists()
-		{
+		bool Exists() {
 			return fs::exists(filename_);
 		}
 
-		bool CreateDirectory()
-		{
+		bool CreateDirectory() {
 			if (Exists())
 				return true;
 			return fs::create_directories(filename_);
 		}
 
-		bool ScanDirectory(std::vector<std::string>* arry)
-		{
+		bool ScanDirectory(std::vector<std::string>* arry) {
 			FileUtil(filename_).CreateDirectory();
 			for (auto& p : fs::directory_iterator(filename_))
 			{

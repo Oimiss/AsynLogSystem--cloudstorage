@@ -31,9 +31,13 @@ class AsyncWorker {
         cond_consumer_.notify_one();
     }
     void Stop() {
-        stop_ = true;
-        cond_consumer_.notify_all();  // 所有线程把缓冲区内数据处理完就结束了
-        thread_.join();
+        if (!stop_) {
+            stop_ = true;
+            cond_consumer_.notify_all();  // 所有线程把缓冲区内数据处理完就结束了
+            if (thread_.joinable()) {
+                thread_.join();
+            }
+        }
     }
 
    private:

@@ -8,25 +8,19 @@
 #include <iostream>
 using std::cout;
 using std::endl;
-namespace mylog
-{
-    namespace Util
-    {
-        class Date
-        {
+namespace mylog {
+    namespace Util {
+        class Date {
         public:
             static time_t Now() { return time(nullptr); }
         };
-        class File
-        {
+        class File {
         public:
-            static bool Exists(const std::string &filename)
-            {
+            static bool Exists(const std::string &filename) {
                 struct stat st;
                 return (0 == stat(filename.c_str(), &st));
             }
-            static std::string Path(const std::string &filename)
-            {
+            static std::string Path(const std::string &filename) {
                 if (filename.empty())
                     return "";
                 int pos = filename.find_last_of("/\\");
@@ -34,8 +28,7 @@ namespace mylog
                     return filename.substr(0, pos + 1);
                 return "";
             }
-            static void CreateDirectory(const std::string &pathname)
-            {
+            static void CreateDirectory(const std::string &pathname) {
                 if (pathname.empty())
                     perror("文件所给路径为空：");
                 // 文件不存在再创建

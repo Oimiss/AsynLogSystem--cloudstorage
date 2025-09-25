@@ -14,10 +14,8 @@
 
 extern ThreadPool *tp;
 
-namespace mylog
-{
-    class AsyncLogger
-    {
+namespace mylog {
+    class AsyncLogger {
     public:
         using ptr = std::shared_ptr<AsyncLogger>;
         AsyncLogger(const std::string &logger_name, std::vector<LogFlush::ptr> &flushs, AsyncType type)
@@ -30,9 +28,7 @@ namespace mylog
         std::string Name() { return logger_name_; }
         //该函数则是特定日志级别的日志信息的格式化，当外部调用该日志器时，使用debug模式的日志就会进来
         //在serialize时把日志信息中的日志级别定义为DEBUG。
-        void Debug(const std::string &file, size_t line, const std::string format,
-                   ...)
-        {
+        void Debug(const std::string &file, size_t line, const std::string format, ...) {
             // 获取可变参数列表中的格式
             va_list va;
             va_start(va, format);
@@ -48,9 +44,7 @@ namespace mylog
             free(ret);
             ret = nullptr;
         };
-        void Info(const std::string &file, size_t line, const std::string format,
-                  ...)
-        {
+        void Info(const std::string &file, size_t line, const std::string format, ...) {
             va_list va;
             va_start(va, format);
             char *ret;
@@ -66,9 +60,7 @@ namespace mylog
             ret = nullptr;
         };
 
-        void Warn(const std::string &file, size_t line, const std::string format,
-                  ...)
-        {
+        void Warn(const std::string &file, size_t line, const std::string format, ...) {
             va_list va;
             va_start(va, format);
             char *ret;
@@ -82,9 +74,7 @@ namespace mylog
             free(ret);
             ret = nullptr;
         };
-        void Error(const std::string &file, size_t line, const std::string format,
-                   ...)
-        {
+        void Error(const std::string &file, size_t line, const std::string format, ...) {
             va_list va;
             va_start(va, format);
             char *ret;
@@ -99,9 +89,7 @@ namespace mylog
             free(ret);
             ret = nullptr;
         };
-        void Fatal(const std::string &file, size_t line, const std::string format,
-                   ...)
-        {
+        void Fatal(const std::string &file, size_t line, const std::string format, ...) {
             va_list va;
             va_start(va, format);
             char *ret;
@@ -120,8 +108,7 @@ namespace mylog
     protected:
         //在这里将日志消息组织起来，并写入文件
         void serialize(LogLevel::value level, const std::string &file, size_t line,
-                       char *ret)
-        {
+                       char *ret) {
             // std::cout << "Debug:serialize begin\n";
             LogMessage msg(level, file, line, logger_name_, ret);
             std::string data = msg.format();
@@ -145,13 +132,11 @@ namespace mylog
             // std::cout << "Debug:serialize Flush\n";
         }
 
-        void Flush(const char *data, size_t len)
-        {
+        void Flush(const char *data, size_t len) {
             asyncworker->Push(data, len); // Push函数本身是线程安全的，这里不加锁
         }
 
-        void RealFlush(Buffer &buffer)
-        { // 由异步线程进行实际写文件
+        void RealFlush(Buffer &buffer) { // 由异步线程进行实际写文件
             if (flushs_.empty())
                 return;
             for (auto &e : flushs_)
@@ -174,15 +159,13 @@ namespace mylog
     public:
         using ptr = std::shared_ptr<LoggerBuilder>;
         void BuildLoggerName(const std::string &name) { logger_name_ = name; }
-        void BuildLopperType(AsyncType type) { async_type_ = type; }
+        void BuildLoggerType(AsyncType type) { async_type_ = type; }
         template <typename FlushType, typename... Args>
-        void BuildLoggerFlush(Args &&...args)
-        {
+        void BuildLoggerFlush(Args &&...args) {
             flushs_.emplace_back(
                 LogFlushFactory::CreateLog<FlushType>(std::forward<Args>(args)...));
         }
-        AsyncLogger::ptr Build()
-        {
+        AsyncLogger::ptr Build() {
             assert(logger_name_.empty() == false);// 必须有日志器名称
             
             // 如果写日志方式没有指定，那么采用默认的标准输出

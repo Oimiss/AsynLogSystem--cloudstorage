@@ -6,8 +6,7 @@ using std::endl;
 const std::string low_dir_g = "./low_storage/";
 const std::string deep_dir_g = "./deep_storage/";
 
-int main()
-{
+int main() {
 #ifdef _WIN32
 	WSADATA wda;
 	WSAStartup(MAKEWORD(2, 2), &wda);

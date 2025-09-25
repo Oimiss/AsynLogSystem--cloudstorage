@@ -17,13 +17,11 @@ namespace storage
 {
     namespace fs = std::experimental::filesystem;
 
-    static unsigned char ToHex(unsigned char x)
-    {
+    static unsigned char ToHex(unsigned char x) {
         return x > 9 ? x + 55 : x + 48;
     }
 
-    static unsigned char FromHex(unsigned char x)
-    {
+    static unsigned char FromHex(unsigned char x) {
         unsigned char y;
         if (x >= 'A' && x <= 'Z')
             y = x - 'A' + 10;
@@ -35,8 +33,7 @@ namespace storage
             assert(0);
         return y;
     }
-    static std::string UrlDecode(const std::string &str)
-    {
+    static std::string UrlDecode(const std::string &str) {
         std::string strTemp = "";
         size_t length = str.length();
         for (size_t i = 0; i < length; i++)
@@ -56,8 +53,7 @@ namespace storage
         return strTemp;
     }
 
-    class FileUtil
-    {
+    class FileUtil {
     private:
         std::string filename_;
 
@@ -67,8 +63,7 @@ namespace storage
         ////////////////////////////////////////////
         // 文件操作
         //  获取文件大小
-        int64_t FileSize()
-        {
+        int64_t FileSize() {
             struct stat s;
             auto ret = stat(filename_.c_str(), &s);
             if (ret == -1)
@@ -79,8 +74,7 @@ namespace storage
             return s.st_size;
         }
         // 获取文件最近访问时间
-        time_t LastAccessTime()
-        {
+        time_t LastAccessTime() {
             struct stat s;
             auto ret = stat(filename_.c_str(), &s);
             if (ret == -1)
@@ -92,8 +86,7 @@ namespace storage
         }
 
         // 获取文件最近修改时间
-        time_t LastModifyTime()
-        {
+        time_t LastModifyTime() {
             struct stat s;
             auto ret = stat(filename_.c_str(), &s);
             if (ret == -1)
@@ -105,8 +98,7 @@ namespace storage
         }
 
         // 从路径中解析出文件名
-        std::string FileName()
-        {
+        std::string FileName() {
             auto pos = filename_.find_last_of("/");
             if (pos == std::string::npos)
                 return filename_;
@@ -114,8 +106,7 @@ namespace storage
         }
 
         // 从文件POS处获取len长度字符给content
-        bool GetPosLen(std::string *content, size_t pos, size_t len)
-        {
+        bool GetPosLen(std::string *content, size_t pos, size_t len) {
             // 判断要求数据内容是否符合文件大小
             if (pos + len > FileSize())
             {
@@ -148,14 +139,12 @@ namespace storage
         }
 
         // 获取文件内容
-        bool GetContent(std::string *content)
-        {
+        bool GetContent(std::string *content) {
             return GetPosLen(content, 0, FileSize());
         }
 
         // 写文件
-        bool SetContent(const char *content, size_t len)
-        {
+        bool SetContent(const char *content, size_t len) {
             std::ofstream ofs;
             ofs.open(filename_.c_str(), std::ios::binary);
             if (!ofs.is_open())
@@ -176,8 +165,7 @@ namespace storage
         //////////////////////////////////////////////
         // 压缩操作
         //  压缩文件
-        bool Compress(const std::string &content, int format)
-        {
+        bool Compress(const std::string &content, int format) {
 
             std::string packed = bundle::pack(format, content);
             if (packed.size() == 0)
@@ -194,8 +182,7 @@ namespace storage
             }
             return true;
         }
-        bool UnCompress(std::string &download_path)
-        {
+        bool UnCompress(std::string &download_path) {
             // 将当前压缩包数据读取出来
             std::string body;
             if (this->GetContent(&body) == false)
@@ -217,20 +204,17 @@ namespace storage
         ///////////////////////////////////////////
         // 目录操作
         // 以下三个函数使用c++17中文件系统给的库函数实现
-        bool Exists()
-        {
+        bool Exists() {
             return fs::exists(filename_);
         }
 
-        bool CreateDirectory()
-        {
+        bool CreateDirectory() {
             if (Exists())
                 return true;
             return fs::create_directories(filename_);
         }
 
-        bool ScanDirectory(std::vector<std::string> *arry)
-        {
+        bool ScanDirectory(std::vector<std::string> *arry) {
             for (auto &p : fs::directory_iterator(filename_))
             {
                 if (fs::is_directory(p) == true)
@@ -242,11 +226,9 @@ namespace storage
         }
     };
 
-    class JsonUtil
-    {
+    class JsonUtil {
     public:
-        static bool Serialize(const Json::Value &val, std::string *str)
-        {
+        static bool Serialize(const Json::Value &val, std::string *str) {
             // 建造者生成->建造者实例化json写对象->调用写对象中的接口进行序列化写入str
             Json::StreamWriterBuilder swb;
             swb["emitUTF8"] = true;
@@ -260,8 +242,7 @@ namespace storage
             *str = ss.str();
             return true;
         }
-        static bool UnSerialize(const std::string &str, Json::Value *val)
-        {
+        static bool UnSerialize(const std::string &str, Json::Value *val) {
             // 操作方法类似序列化
             Json::CharReaderBuilder crb;
             std::unique_ptr<Json::CharReader> ucr(crb.newCharReader());

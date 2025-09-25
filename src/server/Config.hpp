@@ -20,8 +20,7 @@ namespace storage
     private:
         static std::mutex _mutex;
         static Config *_instance;
-        Config()
-        {
+        Config() {
             if (ReadConfig() == false)
             {
                 mylog::GetLogger("asynclogger")->Fatal("ReadConfig failed");
@@ -32,8 +31,7 @@ namespace storage
 
     public:
         // 读取配置文件信息
-        bool ReadConfig()
-        {
+        bool ReadConfig() {
             mylog::GetLogger("asynclogger")->Info("ReadConfig start");
 
             storage::FileUtil fu(Config_File);
@@ -57,39 +55,31 @@ namespace storage
             
             return true;
         }
-        int GetServerPort()
-        {
+        int GetServerPort() {
             return server_port_;
         }
-        std::string GetServerIp()
-        {
+        std::string GetServerIp() {
             return server_ip;
         }
-        std::string GetDownloadPrefix()
-        {
+        std::string GetDownloadPrefix() {
             return download_prefix_;
         }
-        int GetBundleFormat()
-        {
+        int GetBundleFormat() {
             return bundle_format_;
         }
-        std::string GetDeepStorageDir()
-        {
+        std::string GetDeepStorageDir() {
             return deep_storage_dir_;
         }
-        std::string GetLowStorageDir()
-        {
+        std::string GetLowStorageDir() {
             return low_storage_dir_;
         }
-        std::string GetStorageInfoFile()
-        {
+        std::string GetStorageInfoFile() {
             return storage_info_;
         }
 
     public:
         // 获取单例类对象
-        static Config *GetInstance()
-        {
+        static Config *GetInstance() {
             if (_instance == nullptr)
             {
                 _mutex.lock();

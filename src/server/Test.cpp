@@ -11,15 +11,13 @@ using namespace std;
 storage::DataManager *data_;
 ThreadPool* tp=nullptr;
 mylog::Util::JsonData* g_conf_data;
-void service_module()
-{
+void service_module() {
     storage::Service s;
     mylog::GetLogger("asynclogger")->Info("service step in RunModule");
     s.RunModule();
 }
 
-void log_system_module_init()
-{
+void log_system_module_init() {
     g_conf_data = mylog::Util::JsonData::GetJsonData();
     tp = new ThreadPool(g_conf_data->thread_count);
     std::shared_ptr<mylog::LoggerBuilder> Glb(new mylog::LoggerBuilder());
@@ -30,8 +28,7 @@ void log_system_module_init()
     //The logger is assigned to the managed object, and the caller lands the log by invoking the singleton managed object
     mylog::LoggerManager::GetInstance().AddLogger(Glb->Build());
 }
-int main()
-{
+int main() {
     log_system_module_init();
     data_ = new storage::DataManager();
 

@@ -12,8 +12,7 @@ namespace storage
         std::string storage_path_; // 文件存储路径
         std::string url_;          // 请求URL中的资源路径
 
-        bool NewStorageInfo(const std::string &storage_path)
-        {
+        bool NewStorageInfo(const std::string &storage_path) {
             // 初始化备份文件的信息
             mylog::GetLogger("asynclogger")->Info("NewStorageInfo start");
             FileUtil f(storage_path);
@@ -45,8 +44,7 @@ namespace storage
         bool need_persist_;
 
     public:
-        DataManager()
-        {
+        DataManager() {
             mylog::GetLogger("asynclogger")->Info("DataManager construct start");
             storage_file_ = storage::Config::GetInstance()->GetStorageInfoFile();
             pthread_rwlock_init(&rwlock_, NULL);
@@ -55,13 +53,11 @@ namespace storage
             need_persist_ = true;
             mylog::GetLogger("asynclogger")->Info("DataManager construct end");
         }
-        ~DataManager()
-        {
+        ~DataManager() {
             pthread_rwlock_destroy(&rwlock_);
         }
 
-        bool InitLoad() // 初始化程序运行时从文件读取数据
-        {
+        bool InitLoad() {
             mylog::GetLogger("asynclogger")->Info("init datamanager");
             storage::FileUtil f(storage_file_);
             if (!f.Exists()){
@@ -90,8 +86,7 @@ namespace storage
             return true;
         }
 
-        bool Storage()
-        { // 每次有信息改变则需要持久化存储一次
+        bool Storage() {
 // 把table_中的数据转成json格式存入文件
             mylog::GetLogger("asynclogger")->Info("message storage start");
             std::vector<StorageInfo> arr;
@@ -128,8 +123,7 @@ namespace storage
             return true;
         }
 
-        bool Insert(const StorageInfo &info)
-        {
+        bool Insert(const StorageInfo &info) {
             mylog::GetLogger("asynclogger")->Info("data_message Insert start");
             pthread_rwlock_wrlock(&rwlock_); // 加写锁
             table_[info.url_] = info;
@@ -143,8 +137,7 @@ namespace storage
             return true;
         }
 
-        bool Update(const StorageInfo &info)
-        {
+        bool Update(const StorageInfo &info) {
             mylog::GetLogger("asynclogger")->Info("data_message Update start");
             pthread_rwlock_wrlock(&rwlock_);
             table_[info.url_] = info;
@@ -157,8 +150,7 @@ namespace storage
             mylog::GetLogger("asynclogger")->Info("data_message Update end");
             return true;
         }
-        bool GetOneByURL(const std::string &key, StorageInfo *info)
-        {
+        bool GetOneByURL(const std::string &key, StorageInfo *info) {
             pthread_rwlock_rdlock(&rwlock_);
             // URL是key，所以直接find()找
             if (table_.find(key) == table_.end())
@@ -170,8 +162,7 @@ namespace storage
             pthread_rwlock_unlock(&rwlock_);
             return true;
         }
-        bool GetOneByStoragePath(const std::string &storage_path, StorageInfo *info)
-        {
+        bool GetOneByStoragePath(const std::string &storage_path, StorageInfo *info) {
             pthread_rwlock_rdlock(&rwlock_);
             // 遍历 通过realpath字段找到对应存储信息
             for (auto e : table_)
@@ -186,8 +177,7 @@ namespace storage
             pthread_rwlock_unlock(&rwlock_);
             return false;
         }
-        bool GetAll(std::vector<StorageInfo> *arry)
-        {
+        bool GetAll(std::vector<StorageInfo> *arry) {
             pthread_rwlock_rdlock(&rwlock_);
             for (auto e : table_)
                 arry->emplace_back(e.second);
@@ -195,8 +185,7 @@ namespace storage
             return true;
         }
         
-        bool DeleteByURL(const std::string &url)
-        {
+        bool DeleteByURL(const std::string &url) {
             mylog::GetLogger("asynclogger")->Info("data_message Delete start, url: %s", url.c_str());
             pthread_rwlock_wrlock(&rwlock_); // 加写锁
             
